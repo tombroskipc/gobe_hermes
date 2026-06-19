@@ -1,0 +1,25 @@
+name: gobe-hermes
+
+services:
+  hermes:
+    image: ${HERMES_IMAGE:-nousresearch/hermes-agent:latest}
+    container_name: ${HERMES_CONTAINER_NAME:-gobe-hermes}
+    restart: unless-stopped
+    command: ["gateway", "run"]
+    ports:
+      - "${HERMES_BIND_HOST:-127.0.0.1}:${HERMES_GATEWAY_PORT:-8642}:8642"
+      - "${HERMES_BIND_HOST:-127.0.0.1}:${HERMES_DASHBOARD_PORT:-9119}:9119"
+    volumes:
+      - hermes-data:/opt/data
+    environment:
+      HERMES_DASHBOARD: "${HERMES_DASHBOARD:-1}"
+      HERMES_UID: "${HERMES_UID:-10000}"
+      HERMES_GID: "${HERMES_GID:-10000}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      OPENROUTER_API_KEY: "${OPENROUTER_API_KEY:-}"
+      TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN:-}"
+
+volumes:
+  hermes-data:
+    name: ${HERMES_VOLUME_NAME:-gobe_hermes_data}
